@@ -36,8 +36,8 @@ page = 1
 
 while True:
     # Request GitLab API to retrieve projects
-    gitlab_url = args.url + "/api/v3/projects?page=" + str(page) + "&private_token=" + args.token
-    r = requests.get(gitlab_url, verify=False)
+    gitlab_url = args.url + "/api/v4/projects?visibility=private&page=" + str(page) + "&private_token=" + args.token
+    r = requests.get(gitlab_url, verify=True)
     if r.status_code != 200:
         r.raise_for_status()
 
@@ -47,7 +47,7 @@ while True:
         url = project["ssh_url_to_repo"]
         if args.ssh_port:
             url = "ssh://" + url.replace(":", ":" + args.ssh_port + "/")
-        localPath = backup_directory + "/" + project["path"] + ".git"
+        localPath = backup_directory + "/" + project["path_with_namespace"] + ".git"
         if not os.path.exists(localPath):
             print("Create backup for " + localPath)
             os.system("git clone --mirror " + url + " " + localPath)
