@@ -1,3 +1,5 @@
-run_backup.sh
-bkup*
+bkup/
+fromCygwin/
+api.key
+log/
 
